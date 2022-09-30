@@ -28,9 +28,10 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
-  Product.getOne({
-    where: req.params.id
-  })
+  Product.findOne({
+    where: {
+      id: req.params.id
+  },
   include: [
     {
       model: Category,
@@ -41,6 +42,7 @@ router.get('/:id', (req, res) => {
       attributes: ['id', 'tag_name']
     }
   ]  
+})
   .then(dbProductData => {
     if (!dbProductData) {
       res.status(404).json({ message: 'No product found with this id' });
@@ -51,7 +53,9 @@ router.get('/:id', (req, res) => {
   .catch(err => {
     console.log(err);
     res.status(500).json(err);
-  });});
+  });
+
+});
 
 // create new product
 router.post('/', (req, res) => {
